@@ -1,8 +1,10 @@
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { exit, stdin, stdout } from 'process';
 const prompt = require('prompt-sync')();
 import WeatherDatabase from './db_handler';
 
+type Response = AxiosResponse<any, any>;
+type AxiosPromise = Promise<Response | undefined>;
 
 var readline = require("readline")
 const weatherURL: string = "http://api.weatherstack.com/current"
@@ -17,7 +19,7 @@ var requestParameters = {
     "query": ""
 }
 
-const main = async (args : Array<string>, argv: number ) => {
+const main = async (args : Array<string>, argv: number ): Promise<void | undefined> => {
     
     const db = new WeatherDatabase();
     console.log(`api key : ${requestParameters.access_key}`);
@@ -53,17 +55,19 @@ const main = async (args : Array<string>, argv: number ) => {
     exit(0);
 } 
 
-const userQuery = () =>  {
+const userQuery = (): string =>  {
     try {
         var query = prompt('What location?');
         console.log(`Your query is: ${query}`);
         return query;
     } catch (err) {
       console.error('query rejected', err);
+      return "";
     }
   }
 
-const WeatherRequest = async () => {
+
+const WeatherRequest = async (): AxiosPromise => {
     try {
         
         const response = await axios.get(weatherURL, {params: requestParameters});
