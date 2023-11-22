@@ -15,7 +15,7 @@ var ReadLine = readline.createInterface({
 });
 
 var requestParameters = { 
-    "access_key": "dd4210b05cfe6d49c1c326ca1b5cbe2a",
+    "access_key": "",
     "query": ""
 }
 
